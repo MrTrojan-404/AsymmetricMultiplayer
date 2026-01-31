@@ -24,5 +24,4 @@ void UACBaseAnimInstance::NativeUpdateAnimation(float DeltaTime)
 
 	GroundSpeed = IAnimInterface::Execute_GetGroundSpeed(AnimOwner.GetObject());
 	IsFalling   = IAnimInterface::Execute_IsFalling(AnimOwner.GetObject());
-	EquipState  = IAnimInterface::Execute_GetEquipState(AnimOwner.GetObject());
 }

@@ -93,16 +93,6 @@ bool AACBaseCharacter::IsFalling_Implementation() const
 	return false;
 }
 
-/*EEquipState AACBaseCharacter::GetEquipState_Implementation() const
-{
-	if (CombatComponent)
-	{
-		return CombatComponent->GetEquipState();
-	}
-	return EEquipState::ECS_Unequipped;
-}*/
-
-
 #pragma endregion AnimInterface
 
 #pragma endregion CombatInterface
@@ -119,8 +109,6 @@ void AACBaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AACBaseCharacter::Look);
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &ACharacter::Jump);
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
-		EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Triggered, this, &AACBaseCharacter::AttackButtonPressed);
-
 	}
 }
 
@@ -146,16 +134,11 @@ void AACBaseCharacter::Look(const FInputActionValue& value)
 	AddControllerYawInput(value.Get<FVector2d>().X);
 }
 
-void AACBaseCharacter::AttackButtonPressed()
-{
-	
-}
-
 #pragma endregion Input
 
 #pragma region Helper Functions
 
-void AACBaseCharacter::SetRotationModel(bool bUseControllerYaw)
+void AACBaseCharacter::SetMovementRotationModel(bool bUseControllerYaw)
 {
 	bUseControllerRotationYaw = bUseControllerYaw;
 

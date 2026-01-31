@@ -27,7 +27,4 @@ public:
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category="Animation")
 	bool IsFalling() const;
-
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category="Animation")
-	EEquipState GetEquipState() const;
 };

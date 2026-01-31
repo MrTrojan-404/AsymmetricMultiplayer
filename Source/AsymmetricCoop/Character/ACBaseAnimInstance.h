@@ -25,9 +25,6 @@ public:
 	UPROPERTY(BlueprintReadOnly, Category = Movement)
 	bool IsFalling;
 
-	UPROPERTY(BlueprintReadOnly, Category = Character)
-	EEquipState EquipState;
-
 private:
 	UPROPERTY()
 	TScriptInterface<IAnimInterface> AnimOwner;

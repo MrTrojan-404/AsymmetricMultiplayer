@@ -15,6 +15,16 @@ class UInputMappingContext;
 class UInputAction;
 struct FInputActionValue;
 class UCombatComponent;
+class UInteractionComponent;
+
+UENUM(BlueprintType)
+enum class ECharacterType : uint8
+{
+	ECT_Human UMETA(DisplayName = "Human"),
+	ECT_Monster UMETA(DisplayName = "Monster"),
+	
+	ECT_MAX UMETA(DisplayName = "DefaultMAX")
+};
 
 UCLASS()
 class ASYMMETRICCOOP_API AACBaseCharacter : public ACharacter, public ICombatInterface, public IAnimInterface
@@ -25,7 +35,6 @@ public:
 	AACBaseCharacter();
 
 	virtual void Tick(float DeltaTime) override;
-
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 #pragma region CombatInterface
@@ -41,6 +50,8 @@ public:
 	virtual bool IsFalling_Implementation() const override;
 	
 #pragma endregion AnimInterface
+
+	
 protected:
 	virtual void BeginPlay() override;
 
@@ -50,6 +61,7 @@ protected:
 	UPROPERTY(EditAnywhere)
 	UCameraComponent* Camera;
 
+	ECharacterType CharacterType;
 		
 #pragma region  Input
 	
@@ -65,21 +77,14 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
 	UInputAction* JumpAction;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
-	UInputAction* AttackAction;
-	
 	void Move(const FInputActionValue& value);
 	void Look(const FInputActionValue& value);
 	
-	virtual void AttackButtonPressed();
-	void SetRotationModel(bool bUseControllerYaw);
+	void SetMovementRotationModel(bool bUseControllerYaw);
 
 #pragma endregion Input
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	UCombatComponent* CombatComponent;
-
-
-
-
+	
 };

@@ -4,25 +4,86 @@
 
 #include "CoreMinimal.h"
 #include "ACBaseCharacter.h"
+#include "AsymmetricCoop/Interface/InteractionInterface.h"
+#include "AsymmetricCoop/Interface/PickupInterface.h"
 #include "ACHumanCharacter.generated.h"
 
 UCLASS()
-class ASYMMETRICCOOP_API AACHumanCharacter : public AACBaseCharacter
+class ASYMMETRICCOOP_API AACHumanCharacter : public AACBaseCharacter,
+public IPickupInterface,public IInteractionInterface
 {
 	GENERATED_BODY()
 
 public:
-	// Sets default values for this character's properties
 	AACHumanCharacter();
 
+	virtual void Tick(float DeltaTime) override;
+	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	virtual void OnPickupBegin_Implementation(AActor* PickupActor) override;
+	virtual void OnPickupEnd_Implementation(AActor* PickupActor) override;
+
+#pragma region CombatInterface
+
+	virtual void PlayEquippedSwapMontage_Implementation() override;
+	virtual  void OnSwapEquippedFinished_Implementation() override;
+	
+#pragma endregion CombatInterface
+
+	
+#pragma region AnimInterface
+
+	
+#pragma endregion AnimInterface
+
+	
 protected:
-	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+#pragma region Input
 
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	UPROPERTY(EditDefaultsOnly, Category="Input")
+	UInputMappingContext* HumanMappingContext;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
+	UInputAction* InteractAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
+	UInputAction* SwapWeaponAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
+	UInputAction* DropAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
+	UInputAction* FireAction;
+
+	void InteractButtonPressed();
+	void DropButtonPressed();
+	void SwapButtonPressed();
+	
+#pragma endregion Input
+
+private:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta=(AllowPrivateAccess="true"))
+	UInteractionComponent* InteractionComponent;
+	
+#pragma region Interaction
+	
+	void UpdateInteractionFocus();
+	void SetFocusedItem(AItem* NewItem);
+	void ClearFocusedItem();
+	virtual void OnEquipItem_Implementation(AItem* Item) override;
+	
+#pragma endregion Interaction
+
+#pragma region AnimationMontages
+
+	UPROPERTY(EditDefaultsOnly, Category = Montages)
+	UAnimMontage* SwapMontage;
+
+	UPROPERTY(EditDefaultsOnly, Category = Montages)
+	UAnimMontage* HitReactMontage;
+	
+#pragma endregion AnimationMontage
+
 };

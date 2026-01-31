@@ -3,11 +3,11 @@
 
 #include "ACMonsterCharacter.h"
 
+#include "EnhancedInputSubsystems.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 
 
-// Sets default values
 AACMonsterCharacter::AACMonsterCharacter()
 {
 	PrimaryActorTick.bCanEverTick = true;
@@ -18,13 +18,25 @@ AACMonsterCharacter::AACMonsterCharacter()
 	GetCharacterMovement()->RotationRate = FRotator::ZeroRotator;
 
 	SpringArm->bUsePawnControlRotation = true;
-	
+
+	CharacterType = ECharacterType::ECT_Monster;
 }
 
-// Called when the game starts or when spawned
 void AACMonsterCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+
+	if (!IsLocallyControlled()) return;
+
+	if (APlayerController* PC = Cast<APlayerController>(Controller))
+	{
+		if (auto* Subsystem =
+			ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(
+				PC->GetLocalPlayer()))
+		{
+			Subsystem->AddMappingContext(MonsterMappingContext, 1);
+		}
+	}
 	
 }
 

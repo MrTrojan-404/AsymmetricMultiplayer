@@ -3,20 +3,22 @@
 UENUM(BlueprintType)
 enum class ECombatState : uint8
 {
-	EAS_Unoccupied UMETA(DisplayName = "Unoccupied"),
-	EAS_Attacking UMETA(DisplayName = "Attacking"),
+	ECS_Unoccupied UMETA(DisplayName = "Unoccupied"),
+	ECS_Reloading UMETA(DisplayName = "Reloading"),
+	ECS_ThrowingGrenade UMETA(DisplayName = "Throwing Grenade"),
 	ECS_SwappingWeapons UMETA(DisplayName = "Swapping Weapons"),
 
-	EAS_MAX UMETA(DisplayName = "DefaultMAX")
+
+	ECS_MAX UMETA(DisplayName = "DefaultMAX")
 };
 
 UENUM(BlueprintType)
-enum class EEquipState : uint8
+enum class EPlayerWeaponState : uint8
 {
-	ECS_Unequipped UMETA(DisplayName = "Unequippied"),
-	ECS_EquippedPrimary UMETA(DisplayName = "Equipped One-Handed Weapon"),
-	ECS_EquippedSecondary UMETA(DisplayName = "Equipped Two-Handed Weapon"),
+	EPWS_HasNoWeapon UMETA(DisplayName = "HasNoWeapon"),
+	EPWS_HasOneWeapon UMETA(DisplayName = "HasOneWeapon"),
+	EPWS_HasTwoWeapons UMETA(DisplayName = "HasTwoWeapons"),
 	
-	ECS_MAX UMETA(DisplayName = "DefaultMAX")
+	EPWS_MAX UMETA(DisplayName = "DefaultMAX")
 
 };

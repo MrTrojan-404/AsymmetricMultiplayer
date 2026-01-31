@@ -3,23 +3,42 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "AsymmetricCoop/Interface/InteractionInterface.h"
 #include "GameFramework/Actor.h"
 #include "Item.generated.h"
 
+class UPickupComponent;
+
 UCLASS()
-class ASYMMETRICCOOP_API AItem : public AActor
+class ASYMMETRICCOOP_API AItem : public AActor, public IInteractionInterface
 {
 	GENERATED_BODY()
 
 public:
-	// Sets default values for this actor's properties
 	AItem();
+	
+	virtual void Interact_Implementation(AActor* Interactor) override;
+	virtual FText GetInteractionText_Implementation() const override;
+	
+	void ShowPickupWidget(bool bShow);
+	void EnableOutline(bool bEnable);
+
+	void EnableCustomDepth(bool bEnable);
+
+	FORCEINLINE USkeletalMeshComponent* GetItemMesh() const { return ItemMesh; }
 
 protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	USkeletalMeshComponent* ItemMesh;
 
-public:
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UPickupComponent* PickupComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "UI")
+	class UWidgetComponent* PickupWidgetComponent;
+
+	UPROPERTY(VisibleAnywhere, Category="Interaction")
+	class UBoxComponent* TraceBox;
+
+private:
 };

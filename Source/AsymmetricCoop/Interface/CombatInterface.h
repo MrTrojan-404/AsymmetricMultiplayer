@@ -32,9 +32,26 @@ public:
 	AActor* GetCombatOwner() const;
 
 	UFUNCTION(BlueprintNativeEvent, Category="Combat")
+	void PlayAttackMontage();
+
+	UFUNCTION(BlueprintNativeEvent, Category="Combat")
+	void PlayEquippedSwapMontage();
+
+	UFUNCTION(BlueprintNativeEvent, Category="Combat")
+	void PlayHitReactMontage(const FName& SectionName);
+
+	UFUNCTION(BlueprintNativeEvent, Category="Combat")
+	void OnMeleeAttackFinished();
+
+	UFUNCTION(BlueprintNativeEvent, Category="Combat")
+	void OnSwapEquippedFinished();
+
+	UFUNCTION(BlueprintNativeEvent, Category="Combat")
 	void OnEquipItem(AItem* Item);
 
 	UFUNCTION(BlueprintNativeEvent, Category="Combat")
-	void AttachToSpringArm(AWeapon* WeaponToAttach);
+	void ReceiveDamage(AActor* DamagedActor, float Damage,
+		const UDamageType* DamageType, AController* InstigatorController,
+		AActor* DamageCauser);
 	
 };
