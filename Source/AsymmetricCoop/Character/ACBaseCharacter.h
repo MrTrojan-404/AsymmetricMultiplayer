@@ -3,26 +3,83 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "AsymmetricCoop/CombatState.h"
+#include "AsymmetricCoop/Interface/AnimInterface.h"
+#include "AsymmetricCoop/Interface/CombatInterface.h"
 #include "GameFramework/Character.h"
 #include "ACBaseCharacter.generated.h"
 
+class USpringArmComponent;
+class UCameraComponent;
+class UInputMappingContext;
+class UInputAction;
+struct FInputActionValue;
+class UCombatComponent;
+
 UCLASS()
-class ASYMMETRICCOOP_API AACBaseCharacter : public ACharacter
+class ASYMMETRICCOOP_API AACBaseCharacter : public ACharacter, public ICombatInterface, public IAnimInterface
 {
 	GENERATED_BODY()
 
 public:
-	// Sets default values for this character's properties
 	AACBaseCharacter();
 
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-
-public:
-	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+#pragma region CombatInterface
+
+	virtual USkeletalMeshComponent* GetCombatMesh_Implementation() const override;
+	virtual AActor* GetCombatOwner_Implementation() const override;
+	
+#pragma endregion CombatInterface
+
+#pragma region AnimInterface
+	
+	virtual float GetGroundSpeed_Implementation() const override;
+	virtual bool IsFalling_Implementation() const override;
+	
+#pragma endregion AnimInterface
+protected:
+	virtual void BeginPlay() override;
+
+	UPROPERTY(EditAnywhere)
+	USpringArmComponent* SpringArm;
+	
+	UPROPERTY(EditAnywhere)
+	UCameraComponent* Camera;
+
+		
+#pragma region  Input
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
+	UInputMappingContext* DefaultMappingContext;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
+	UInputAction* MoveAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
+	UInputAction* LookAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
+	UInputAction* JumpAction;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
+	UInputAction* AttackAction;
+	
+	void Move(const FInputActionValue& value);
+	void Look(const FInputActionValue& value);
+	
+	virtual void AttackButtonPressed();
+	void SetRotationModel(bool bUseControllerYaw);
+
+#pragma endregion Input
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	UCombatComponent* CombatComponent;
+
+
+
+
 };
